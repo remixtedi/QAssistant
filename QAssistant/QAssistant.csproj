@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <Authors>Giorgi Tediashvili</Authors>
+        <Company />
+        <Description>QAssitant Description.</Description>
+        <RepositoryUrl>https://github.com/remixtedi/QAssistant</RepositoryUrl>
+        <PackageTags>Selenium, WebDriver</PackageTags>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <PackageProjectUrl></PackageProjectUrl>
+        <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+        <Version>1.0.1</Version>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+    </ItemGroup>
+
+</Project>
