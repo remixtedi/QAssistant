@@ -188,6 +188,35 @@ namespace QAssistant.WaitHelpers
         }
 
         /// <summary>
+        /// An expectation for checking if the given text is empty in the specified element.
+        /// </summary>
+        /// <param name="locator">The locator used to find the element.</param>
+        /// <returns><see langword="true"/> once the element text is empty; otherwise, <see langword="false"/>.</returns>
+        public static Func<IWebDriver, IWebElement> TextIsNotEmpty(By locator)
+        {
+            return (driver) =>
+            {
+                try
+                {
+
+                    var element = driver.FindElement(locator);
+                    if (element.Text != string.Empty)
+                    {
+                        return element;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return null;
+                }
+            };
+        }
+
+        /// <summary>
         /// An expectation for checking if the given text is present in the specified element.
         /// </summary>
         /// <param name="element">The WebElement</param>
