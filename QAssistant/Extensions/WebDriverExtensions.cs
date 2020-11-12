@@ -98,7 +98,7 @@ namespace QAssistant.Extensions
         /// <returns>The boolean type result whether the element value is empty or not.</returns>
         public static bool IsFieldClear(this IWebDriver driver, By selector)
         {
-            return string.IsNullOrEmpty(driver.FindElement(selector).GetProperty("value"));
+            return string.IsNullOrEmpty(driver.FindElement(selector).ReadFromFieldValue());
         }
         
         /// <summary>
@@ -110,9 +110,10 @@ namespace QAssistant.Extensions
         /// value is not set or the property does not exist.</returns>
         public static string ReadFromFieldValue(this IWebDriver driver, By selector)
         {
-            return driver.FindElement(selector).GetProperty("value");
+            
+            return driver.FindElement(selector).ReadFromFieldValue();
         }
-        
+
         /// <summary>
         /// Check if element class attribute contains this class name.
         /// </summary>
