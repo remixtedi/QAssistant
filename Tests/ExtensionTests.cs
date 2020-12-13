@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using QAssistant;
-using QAssistant.Enums;
 using QAssistant.Extensions;
 
 namespace Tests
@@ -16,7 +14,7 @@ namespace Tests
         {
             var opts = new ChromeOptions();
             opts.AddArgument("--start-maximized");
-            _driver = WebDriverFactory.Create(BrowserType.Chrome);
+            _driver = new ChromeDriver(opts);
             _driver.Navigate().GoToUrl("https://google.com");
         }
 
