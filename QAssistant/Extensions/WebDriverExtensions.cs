@@ -176,7 +176,6 @@ namespace QAssistant.Extensions
         /// </exception>
         public static void Click(this IWebDriver driver, By selector)
         {
-            Console.WriteLine("test clicked");
             driver.WaitUntilFindElement(selector).Click();
         }
 
