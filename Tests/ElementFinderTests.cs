@@ -28,25 +28,25 @@ namespace Tests
         [Test]
         public void TestElementIdentifierOnSuccessWithElementIdentifier()
         {
-            Assert.True(typeof(RemoteWebElement) == _elementFinder.Find(_googlePage, "logoelement").GetType());
+            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "logoelement").GetType());
         }
 
         [Test]
         public void TestElementIdentifierOnFailWithElementIdentifier()
         {
-            Assert.IsNull(_elementFinder.Find(_googlePage, "InvalidIdentifier"));
+            Assert.IsNull(_elementFinder.FindElement(_googlePage, "InvalidIdentifier"));
         }
 
         [Test]
         public void TestElementIdentifierOnSuccessWithPropertyName()
         {
-            Assert.True(typeof(RemoteWebElement) == _elementFinder.Find(_googlePage, "Logo").GetType());
+            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "Logo").GetType());
         }
 
         [Test]
         public void TestElementIdentifierOnFailWithPropertyName()
         {
-            Assert.IsNull(_elementFinder.Find(_googlePage, "InvalidName"));
+            Assert.IsNull(_elementFinder.FindElement(_googlePage, "InvalidName"));
         }
 
         [Test]

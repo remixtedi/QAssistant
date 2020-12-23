@@ -17,6 +17,7 @@ namespace Tests
         [ElementIdentifier("logoelement")]
         public IWebElement Logo => _driver.WaitUntilElementIsDisplayed(By.Id("hplogo"));
 
+        [ElementIdentifier("links")]
         public ReadOnlyCollection<IWebElement> Links => _driver.FindElements(By.XPath("//a"));
     }
 }

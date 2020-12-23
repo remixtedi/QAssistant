@@ -5,11 +5,11 @@ namespace QAssistant.Helpers
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class ElementIdentifier : Attribute
     {
-        private readonly string identifier;
+        public string Identifier { get; }
 
         public ElementIdentifier(string identifier)
         {
-            this.identifier = identifier;
+            Identifier = identifier;
         }
     }
 }

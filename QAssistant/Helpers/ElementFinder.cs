@@ -8,12 +8,26 @@ namespace QAssistant.Helpers
 {
     public class ElementFinder<T>
     {
-        public IWebElement Find(T page, string elementIdentifier)
+        /// <summary>
+        ///     Finds the first <see cref="T:OpenQA.Selenium.IWebElement" /> from page object using the
+        ///     <see cref="T:QAssistant.Helpers.ElementIdentifier" /> attribute or property name.
+        /// </summary>
+        /// <param name="page">The page object to use.</param>
+        /// <param name="elementIdentifier">The element identifier to use.</param>
+        /// <returns>The first matching <see cref="T:OpenQA.Selenium.IWebElement" /> on the current page object.</returns>
+        public IWebElement FindElement(T page, string elementIdentifier)
         {
             var value = GetValue(typeof(RemoteWebElement), page, elementIdentifier);
             return (IWebElement) value;
         }
 
+        /// <summary>
+        ///     Finds the first collection of <see cref="T:OpenQA.Selenium.IWebElement" /> type objects from page object using the
+        ///     <see cref="T:QAssistant.Helpers.ElementIdentifier" /> attribute or property name.
+        /// </summary>
+        /// <param name="page">The page object to use.</param>
+        /// <param name="elementIdentifier">The element identifier to use.</param>
+        /// <returns>The first matching <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> on the current page object.</returns>
         public ReadOnlyCollection<IWebElement> FindElements(T page, string elementIdentifier)
         {
             var value = GetValue(typeof(ReadOnlyCollection<IWebElement>), page, elementIdentifier);
