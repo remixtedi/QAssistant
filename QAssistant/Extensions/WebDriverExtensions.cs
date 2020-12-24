@@ -15,10 +15,10 @@ namespace QAssistant.Extensions
         private const int DefaultWaitTime = 10;
 
         // Default format for TakeScreenshot method
-        private const string DefaultFileFormat = "png";
+        private const ScreenshotImageFormat DefaultScreenshotImageFormat = ScreenshotImageFormat.Png;
 
-        // Default file name for TakeScreenshot method
-        private const string DefaultFileName = "Screenshot";
+        // Default image file name for TakeScreenshot method
+        private const string DefaultScreenshotImageName = "Screenshot";
 
         // Default folder name for TakeScreenshot method (it will be added to end of the program execution path)
         private const string DefaultScreenshotsFolderName = "Screenshots";
@@ -300,25 +300,25 @@ namespace QAssistant.Extensions
 
         /// <summary>
         ///     Takes a screenshot of the page and saves it in <see cref="DefaultScreenshotsFolderName" /> folder with
-        ///     <see cref="DefaultFileName" /> and <see cref="DefaultFileFormat" />.
+        ///     <see cref="DefaultScreenshotImageName" /> and <see cref="DefaultScreenshotImageFormat" />.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver" />.</param>
         /// <returns>The <see cref="string" /> type value of image path.</returns>
         public static string TakeScreenshot(this IWebDriver driver)
         {
-            return driver.TakeScreenshot(DefaultFileName,
+            return driver.TakeScreenshot(DefaultScreenshotImageName,
                 Path.Combine(
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory(),
                     DefaultScreenshotsFolderName),
-                DefaultFileFormat);
+                DefaultScreenshotImageFormat);
         }
 
         /// <summary>
         ///     Takes a screenshot of the page and saves it in <see cref="DefaultScreenshotsFolderName" /> folder with passed file
-        ///     name and <see cref="DefaultFileFormat" />.
+        ///     name and <see cref="DefaultScreenshotImageFormat" />.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver" />.</param>
-        /// <param name="fileName">The file name./</param>
+        /// <param name="fileName">The image file name./</param>
         /// <returns>The <see cref="string" /> type value of image path.</returns>
         public static string TakeScreenshot(this IWebDriver driver, string fileName)
         {
@@ -326,36 +326,40 @@ namespace QAssistant.Extensions
                 Path.Combine(
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory(),
                     DefaultScreenshotsFolderName),
-                DefaultFileFormat);
+                DefaultScreenshotImageFormat);
         }
 
         /// <summary>
         ///     Takes a screenshot of the page and saves it in passed file path with passed file name and
-        ///     <see cref="DefaultFileFormat" />.
+        ///     <see cref="DefaultScreenshotImageFormat" />.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver" />.</param>
-        /// <param name="fileName">The file name.</param>
-        /// <param name="filePath">The file path.</param>
+        /// <param name="fileName">The image file name.</param>
+        /// <param name="filePath">The full path to save the screenshot to.</param>
         /// <returns>The <see cref="string" /> type value of image path.</returns>
         public static string TakeScreenshot(this IWebDriver driver, string fileName, string filePath)
         {
-            return driver.TakeScreenshot(fileName, filePath, DefaultFileFormat);
+            return driver.TakeScreenshot(fileName, filePath, DefaultScreenshotImageFormat);
         }
 
         /// <summary>
         ///     Takes a screenshot of the page and saves it in passed file path with passed file name and file format.
         /// </summary>
         /// <param name="driver"></param>
-        /// <param name="fileName">The file name.</param>
-        /// <param name="filePath">The file path.</param>
-        /// <param name="fileFormat">The file format.</param>
+        /// <param name="fileName">The image file name.</param>
+        /// <param name="filePath">The The full path and file name to save the screenshot to..</param>
+        /// <param name="imageFormat">
+        ///     A <see cref="T:OpenQA.Selenium.ScreenshotImageFormat" /> value indicating the format
+        ///     to save the image to.
+        /// </param>
         /// <returns>The <see cref="string" /> type value of image path.</returns>
-        public static string TakeScreenshot(this IWebDriver driver, string fileName, string filePath, string fileFormat)
+        public static string TakeScreenshot(this IWebDriver driver, string fileName, string filePath,
+            ScreenshotImageFormat imageFormat)
         {
             var screen = driver.TakeScreenshotAsScreenshot().AsByteArray;
             if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
             var filePathAndName = Path.Combine(filePath,
-                $"{fileName}-{DateTime.UtcNow.Ticks}.{fileFormat}");
+                $"{fileName}-{DateTime.UtcNow.Ticks}.{imageFormat}");
             using var save = File.Create(filePathAndName);
             save.Write(screen);
             return filePathAndName;
