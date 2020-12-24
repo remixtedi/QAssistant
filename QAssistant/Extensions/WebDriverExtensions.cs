@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using QAssistant.WaitHelpers;
@@ -11,6 +13,9 @@ namespace QAssistant.Extensions
     {
         // Consider storing the DefaultWaitTime in the web.config.
         private const int DefaultWaitTime = 10;
+
+        // Default Format For Take Screenshot Method
+        private const string DefaultFileFormat = "png";
 
         // Create a default wait time span so we can reuse the most common time span.
         private static readonly TimeSpan DefaultWaitTimeSpan = TimeSpan.FromSeconds(DefaultWaitTime);
@@ -253,7 +258,7 @@ namespace QAssistant.Extensions
         public static void ScrollIntoView(this IWebDriver driver, IWebElement element)
         {
             // Assumes IWebDriver can be cast as IJavaScriptExecuter.
-            ScrollIntoView((IJavaScriptExecutor) driver, element);
+            ScrollIntoView((IJavaScriptExecutor)driver, element);
         }
 
         /// <summary>
@@ -275,6 +280,38 @@ namespace QAssistant.Extensions
         {
             driver.Close();
             driver.Dispose();
+        }
+        // sdadasdasdad
+        public static byte[] GetScreenshotAsBytes(this IWebDriver driver)
+        {
+            var screen = ((ITakesScreenshot)driver).GetScreenshot();
+            return screen.AsByteArray;
+        }
+
+        public static void TakeScreenshot(this IWebDriver driver)
+        {
+            driver.TakeScreenshot("screenshot", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
+        }
+
+        public static void TakeScreenshot(this IWebDriver driver, string fileName)
+        {
+            driver.TakeScreenshot(fileName, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+                DefaultFileFormat);
+        }
+
+        public static void TakeScreenshot(this IWebDriver driver, string filePath, string fileFormat)
+        {
+            driver.TakeScreenshot("screenshot", filePath, fileFormat);
+        }
+
+        public static void TakeScreenshot(this IWebDriver driver, string fileName, string filePath,
+            string fileFormat)
+        {
+            var screen = driver.GetScreenshotAsBytes();
+            if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+            using var save = File.Create(Path.Combine(filePath,
+                $"{fileName}-{DateTime.UtcNow.Ticks}.{fileFormat}"));
+            save.Write(screen);
         }
     }
 }
