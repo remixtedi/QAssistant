@@ -57,7 +57,7 @@ namespace Tests
         [Test]
         public void TakeScreenshotTestWhenFileFormatIsPassed()
         {
-            var file = _driver.TakeScreenshot("screenfromtest", _defaultScreenshotsPath, "jpg");
+            var file = _driver.TakeScreenshot("screenfromtest", _defaultScreenshotsPath, ScreenshotImageFormat.Jpeg);
             Assert.That(File.Exists(file));
             File.Delete(file);
         }
