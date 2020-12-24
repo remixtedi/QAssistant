@@ -8,6 +8,12 @@ namespace Tests
     {
         private readonly RandomGenerator _generator;
 
+        private readonly char[] _symbols =
+        {
+            '!', '"', '#', '$', '%', '\'', '(', ')', '*', '+', ',', '.', '-', '_', '.', '/', '\\', ':', ';', '<',
+            '>', '=', '?', '@', '^', '&', '[', ']', '{', '}', '`', '~'
+        };
+
         public RandomGeneratorTests()
         {
             _generator = new RandomGenerator();
@@ -16,7 +22,8 @@ namespace Tests
         [Test]
         public void RandomSymbols()
         {
-            Assert.True(_generator.RandomSymbols(10).Any(char.IsSymbol));
+            for (var i = 0; i < 100; i++)
+                Assert.True(_generator.RandomSymbols(10).Any(character => _symbols.Contains(character)));
         }
 
         [Test]
@@ -50,13 +57,14 @@ namespace Tests
         }
 
         [Test]
-        public void VRandomStringReturnsOnlyAlphabeticalCharacters()
+        public void RandomStringReturnsAlphabeticalNumericAndSymbolCharacters()
         {
-            Assert.IsFalse(_generator.RandomString(30).Any(char.IsNumber));
+            Assert.IsTrue(_generator.RandomString(30)
+                .Any(character => _symbols.Contains(character) || char.IsLetterOrDigit(character)));
         }
 
         [Test]
-        public void RandomNumberToStrinsIsNumeric()
+        public void RandomNumberToStringIsNumeric()
         {
             Assert.True(_generator.RandomNumber().ToString().Any(char.IsNumber));
         }
@@ -109,6 +117,36 @@ namespace Tests
         public void GeneratesNumbersAndAlphabeticalCharacters5()
         {
             Assert.IsNotEmpty(_generator.RandomDigitsAndLetters());
+        }
+
+        [Test]
+        public void GenerateRandomLetters1()
+        {
+            Assert.IsNotEmpty(_generator.RandomLetter());
+        }
+
+        [Test]
+        public void GenerateRandomLetters2()
+        {
+            Assert.True(_generator.RandomLetter().Any(char.IsLetter));
+        }
+
+        [Test]
+        public void GenerateRandomLetters3()
+        {
+            Assert.True(_generator.RandomLetters(100).Length == 100);
+        }
+
+        [Test]
+        public void GenerateRandomLetters4()
+        {
+            Assert.True(_generator.RandomLetters(100, true).Any(char.IsLower));
+        }
+
+        [Test]
+        public void GenerateRandomLetters5()
+        {
+            Assert.True(_generator.RandomLetters(100).Any(char.IsUpper));
         }
     }
 }
