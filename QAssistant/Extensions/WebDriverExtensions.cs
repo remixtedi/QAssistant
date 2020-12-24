@@ -14,8 +14,14 @@ namespace QAssistant.Extensions
         // Consider storing the DefaultWaitTime in the web.config.
         private const int DefaultWaitTime = 10;
 
-        // Default Format For Take Screenshot Method
+        // Default format for TakeScreenshot method
         private const string DefaultFileFormat = "png";
+
+        // Default file name for TakeScreenshot method
+        private const string DefaultFileName = "Screenshot";
+
+        // Default folder name for TakeScreenshot method (it will be added to end of the program execution path)
+        private const string DefaultScreenshotsFolderName = "Screenshots";
 
         // Create a default wait time span so we can reuse the most common time span.
         private static readonly TimeSpan DefaultWaitTimeSpan = TimeSpan.FromSeconds(DefaultWaitTime);
@@ -258,7 +264,7 @@ namespace QAssistant.Extensions
         public static void ScrollIntoView(this IWebDriver driver, IWebElement element)
         {
             // Assumes IWebDriver can be cast as IJavaScriptExecuter.
-            ScrollIntoView((IJavaScriptExecutor)driver, element);
+            ScrollIntoView((IJavaScriptExecutor) driver, element);
         }
 
         /// <summary>
@@ -281,37 +287,78 @@ namespace QAssistant.Extensions
             driver.Close();
             driver.Dispose();
         }
-        // sdadasdasdad
-        public static byte[] GetScreenshotAsBytes(this IWebDriver driver)
+
+        /// <summary>
+        ///     Gets a <see cref="T:OpenQA.Selenium.Screenshot" /> object representing the image of the page on the screen.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <returns>A <see cref="T:OpenQA.Selenium.Screenshot" /> object containing the image.</returns>
+        public static Screenshot TakeScreenshotAsScreenshot(this IWebDriver driver)
         {
-            var screen = ((ITakesScreenshot)driver).GetScreenshot();
-            return screen.AsByteArray;
+            return ((ITakesScreenshot) driver).GetScreenshot();
         }
 
-        public static void TakeScreenshot(this IWebDriver driver)
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in <see cref="DefaultScreenshotsFolderName" /> folder with
+        ///     <see cref="DefaultFileName" /> and <see cref="DefaultFileFormat" />.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver)
         {
-            driver.TakeScreenshot("screenshot", Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location));
-        }
-
-        public static void TakeScreenshot(this IWebDriver driver, string fileName)
-        {
-            driver.TakeScreenshot(fileName, Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
+            return driver.TakeScreenshot(DefaultFileName,
+                Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory(),
+                    DefaultScreenshotsFolderName),
                 DefaultFileFormat);
         }
 
-        public static void TakeScreenshot(this IWebDriver driver, string filePath, string fileFormat)
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in <see cref="DefaultScreenshotsFolderName" /> folder with passed file
+        ///     name and <see cref="DefaultFileFormat" />.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="fileName">The file name./</param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver, string fileName)
         {
-            driver.TakeScreenshot("screenshot", filePath, fileFormat);
+            return driver.TakeScreenshot(fileName,
+                Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory(),
+                    DefaultScreenshotsFolderName),
+                DefaultFileFormat);
         }
 
-        public static void TakeScreenshot(this IWebDriver driver, string fileName, string filePath,
-            string fileFormat)
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in passed file path with passed file name and
+        ///     <see cref="DefaultFileFormat" />.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="fileName">The file name.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver, string fileName, string filePath)
         {
-            var screen = driver.GetScreenshotAsBytes();
+            return driver.TakeScreenshot(fileName, filePath, DefaultFileFormat);
+        }
+
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in passed file path with passed file name and file format.
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="fileName">The file name.</param>
+        /// <param name="filePath">The file path.</param>
+        /// <param name="fileFormat">The file format.</param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver, string fileName, string filePath, string fileFormat)
+        {
+            var screen = driver.TakeScreenshotAsScreenshot().AsByteArray;
             if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
-            using var save = File.Create(Path.Combine(filePath,
-                $"{fileName}-{DateTime.UtcNow.Ticks}.{fileFormat}"));
+            var filePathAndName = Path.Combine(filePath,
+                $"{fileName}-{DateTime.UtcNow.Ticks}.{fileFormat}");
+            using var save = File.Create(filePathAndName);
             save.Write(screen);
+            return filePathAndName;
         }
     }
 }
