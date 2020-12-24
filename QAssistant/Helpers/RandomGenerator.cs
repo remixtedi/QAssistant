@@ -10,7 +10,6 @@ namespace QAssistant.Helpers
         private const int DefaultRandomNumberMax = 999;
         private readonly Random _random = new Random();
 
-
         public string RandomSymbols(int length)
         {
             var builder = new StringBuilder(length);
@@ -61,6 +60,33 @@ namespace QAssistant.Helpers
         public string RandomString()
         {
             return RandomString(DefaultLength, false);
+        }
+
+        public string RandomDigitsAndLetters(int length, bool lowerCase)
+        {
+            var builder = new StringBuilder(length);
+            for (var i = 0; i < length; i++)
+                if (_random.Next(2) == 1)
+                    builder.Append(RandomString(1));
+                else
+                    builder.Append(RandomNumber(0, 9));
+
+            return lowerCase ? builder.ToString().ToLower() : builder.ToString();
+        }
+
+        public string RandomDigitsAndLetters(int length)
+        {
+            return RandomDigitsAndLetters(length, false);
+        }
+
+        public string RandomDigitsAndLetters(bool lowerCase)
+        {
+            return RandomDigitsAndLetters(DefaultLength, lowerCase);
+        }
+
+        public string RandomDigitsAndLetters()
+        {
+            return RandomDigitsAndLetters(DefaultLength, false);
         }
     }
 }

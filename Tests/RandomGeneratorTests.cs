@@ -80,5 +80,35 @@ namespace Tests
             var value = _generator.RandomNumber(10, 20);
             Assert.IsTrue(value >= 10 && value <= 20);
         }
+
+        [Test]
+        public void GeneratesNumbersAndAlphabeticalCharacters()
+        {
+            Assert.True(_generator.RandomDigitsAndLetters(10, true).Any(char.IsLetterOrDigit));
+        }
+
+        [Test]
+        public void GeneratesNumbersAndAlphabeticalCharacters2()
+        {
+            Assert.True(_generator.RandomDigitsAndLetters(10).Any(char.IsLetterOrDigit));
+        }
+
+        [Test]
+        public void GeneratesNumbersAndAlphabeticalCharacters3()
+        {
+            Assert.True(_generator.RandomDigitsAndLetters(true).Any(c => char.IsLetterOrDigit(c) && char.IsLower(c)));
+        }
+
+        [Test]
+        public void GeneratesNumbersAndAlphabeticalCharacters4()
+        {
+            Assert.True(_generator.RandomDigitsAndLetters(10).Length == 10);
+        }
+
+        [Test]
+        public void GeneratesNumbersAndAlphabeticalCharacters5()
+        {
+            Assert.IsNotEmpty(_generator.RandomDigitsAndLetters());
+        }
     }
 }
