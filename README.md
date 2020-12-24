@@ -53,6 +53,55 @@ namespace Tests
 }
 ```
 
+# QAssitant 1.1.0
+## December 25, 2020
+
+## New Features
+* **TakeScreenshot** - Extension methods to take screenshot of the current page and save it with default parameters or pass the image file name, path and format. You can also get screenshot as "AsByteArray" or "AsBase64EncodedString".
+* **RandomGenerator** - Helper to generate random symbols, letters, numbers or combination of them. It will be helpful in various cases when it is important to generate random strings or numbers.
+* **ElementIdentifier** - Custom attribute for properties. It is created for POM object properties to mark and access them from another classes easly.
+```
+Example:
+        [ElementIdentifier("logoelement")]
+        public IWebElement Logo => _driver.WaitUntilElementIsDisplayed(By.Id("hplogo"));
+```
+* **ElementFinder** - Helper for POM properties to access them with property names or element identifiers from another classes.
+```
+Example:
+        private ElementFinder<GooglePage> _elementFinder;
+
+        [SetUp]
+        public void Setup()
+        {
+            _driver = new ChromeDriver(opts);
+            _googlePage = new GooglePage(_driver);
+            _elementFinder = new ElementFinder<GooglePage>();
+            _driver.Navigate().GoToUrl("https://google.com");
+        }
+
+        [Test]
+        public void TestElementIdentifierOnSuccessWithElementIdentifier()
+        {
+            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "logoelement").GetType());
+        }
+
+        [Test]
+        public void TestElementIdentifierOnSuccessWithPropertyName()
+        {
+            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "Logo").GetType());
+        }
+
+```
+* **WaitUntilElementIsDisplayed** - Extension method finds the first "IWebElement" using the given method and condition and waits for it's visibility.
+
+## Changes
+* **WaitUntilFindElement** extension method now finds the first "IWebElement" using the given method and condition and waits for it's existence. 
+
+## Bug Fixes
+* Some bug fixes and improvements...
+
+
+
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
