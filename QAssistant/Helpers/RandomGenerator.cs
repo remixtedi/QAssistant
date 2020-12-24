@@ -45,8 +45,6 @@ namespace QAssistant.Helpers
         public string RandomString(int length, bool lowerCase)
         {
             var builder = new StringBuilder(length);
-            // var offset = lowerCase ? 'a' : 'A';
-            // const int lettersOffset = 26;
 
             for (var i = 0; i < length; i++)
                 if (_random.Next(3) == 1)
@@ -55,9 +53,6 @@ namespace QAssistant.Helpers
                     builder.Append(RandomLetters(DefaultLetterLength, lowerCase));
                 else
                     builder.Append(RandomNumber(0, 9));
-
-            // var @char = (char) _random.Next(offset, offset + lettersOffset);
-            // builder.Append(@char);
 
             return builder.ToString();
         }
