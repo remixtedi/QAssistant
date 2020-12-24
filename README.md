@@ -60,13 +60,13 @@ namespace Tests
 * **TakeScreenshot** - Extension methods to take screenshot of the current page and save it with default parameters or pass the image file name, path and format. You can also get screenshot as "AsByteArray" or "AsBase64EncodedString".
 * **RandomGenerator** - Helper to generate random symbols, letters, numbers or combination of them. It will be helpful in various cases when it is important to generate random strings or numbers.
 * **ElementIdentifier** - Custom attribute for properties. It is created for POM object properties to mark and access them from another classes easly.
-```
+```csharp
 Example:
         [ElementIdentifier("logoelement")]
         public IWebElement Logo => _driver.WaitUntilElementIsDisplayed(By.Id("hplogo"));
 ```
 * **ElementFinder** - Helper for POM properties to access them with property names or element identifiers from another classes.
-```
+```csharp
 Example:
         private ElementFinder<GooglePage> _elementFinder;
 
