@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using QAssistant.WaitHelpers;
 
@@ -384,6 +385,17 @@ namespace QAssistant.Extensions
             }
 
             return true;
+        }
+
+        /// <summary>
+        ///     Hovers over specified element.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="locator">The locating mechanism to use.</param>
+        public static void HoverOnElement(this IWebDriver driver, By locator)
+        {
+            var action = new Actions(driver);
+            action.MoveToElement(driver.WaitUntilFindElement(locator)).Perform();
         }
     }
 }
