@@ -130,6 +130,24 @@ namespace Tests
             Assert.DoesNotThrow(() => _driver.ScrollIntoView(By.XPath("//*[@id='rso']/div[4]")));
         }
 
+        [Test]
+        public void TestElementExistsOnSuccess()
+        {
+            Assert.True(_driver.ElementExists(By.Name("q")));
+        }
+
+        [Test]
+        public void TestElementExistsOnSuccess2()
+        {
+            Assert.False(_driver.ElementExists(By.Name("Invalid")));
+        }
+
+        [Test]
+        public void TestElementExistsOnFail()
+        {
+            Assert.True(_driver.ElementExists(By.Name("Invalid")));
+        }
+
         [TearDown]
         public void CloseBrowser()
         {

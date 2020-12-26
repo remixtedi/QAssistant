@@ -364,5 +364,26 @@ namespace QAssistant.Extensions
             save.Write(screen);
             return filePathAndName;
         }
+
+        /// <summary>
+        ///     Determines whether the specified <see cref="T:OpenQA.Selenium.IWebElement" /> exists on page.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="locator">The locating mechanism to use.</param>
+        /// <returns><c>true</c> if the specified element is found; otherwise, <c>false</c>.</returns>
+        public static bool ElementExists(this IWebDriver driver, By locator)
+        {
+            try
+            {
+                driver.Wait().Until(ExpectedConditions.ElementExists(locator));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return true;
+        }
     }
 }
