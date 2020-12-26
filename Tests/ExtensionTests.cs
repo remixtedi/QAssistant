@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
 using QAssistant.Extensions;
 
 namespace Tests
@@ -146,6 +147,32 @@ namespace Tests
         public void TestElementExistsOnFail()
         {
             Assert.True(_driver.ElementExists(By.Name("Invalid")));
+        }
+
+        [Test]
+        public void TestGetParent()
+        {
+            Assert.True(typeof(RemoteWebElement) == _driver.WaitUntilFindElement(By.Name("q")).GetParent().GetType());
+        }
+
+        [Test]
+        public void TestGetChild()
+        {
+            Assert.True(typeof(RemoteWebElement) == _driver.WaitUntilFindElement(By.Id("main")).GetChild().GetType());
+        }
+
+        [Test]
+        public void TestGetNextSibling()
+        {
+            Assert.True(typeof(RemoteWebElement) ==
+                        _driver.WaitUntilFindElement(By.Id("body")).GetNextSibling().GetType());
+        }
+
+        [Test]
+        public void TestGetPreviousSibling()
+        {
+            Assert.True(typeof(RemoteWebElement) ==
+                        _driver.WaitUntilFindElement(By.Name("q")).GetPreviousSibling().GetType());
         }
 
         [TearDown]
