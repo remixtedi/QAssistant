@@ -54,7 +54,7 @@ namespace Tests
 ```
 
 # QAssitant 1.1.0
-## December 25, 2020
+## December 28, 2020
 
 ## New Features
 * **TakeScreenshot** - Extension methods to take screenshot of the current page and save it with default parameters or pass the image file name, path and format. You can also get screenshot as "AsByteArray" or "AsBase64EncodedString".
@@ -93,6 +93,7 @@ Example:
 
 ```
 * **WaitUntilElementIsDisplayed** - Extension method finds the first "IWebElement" using the given method and condition and waits for it's visibility.
+* **HoverOnElement, ElementExists, GetParent, GetChild, GetPreviousSibling, GetNextSibling** - Extension methods
 
 ## Changes
 * **WaitUntilFindElement** extension method now finds the first "IWebElement" using the given method and condition and waits for it's existence. 
