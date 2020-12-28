@@ -138,15 +138,9 @@ namespace Tests
         }
 
         [Test]
-        public void TestElementExistsOnSuccess2()
-        {
-            Assert.False(_driver.ElementExists(By.Name("Invalid")));
-        }
-
-        [Test]
         public void TestElementExistsOnFail()
         {
-            Assert.True(_driver.ElementExists(By.Name("Invalid")));
+            Assert.False(_driver.ElementExists(By.Name("Invalid")));
         }
 
         [Test]
@@ -173,6 +167,12 @@ namespace Tests
         {
             Assert.True(typeof(RemoteWebElement) ==
                         _driver.WaitUntilFindElement(By.Name("q")).GetPreviousSibling().GetType());
+        }
+
+        [Test]
+        public void TestHoverOnElement()
+        {
+            Assert.DoesNotThrow(() => _driver.HoverOnElement(By.Name("q")));
         }
 
         [TearDown]
