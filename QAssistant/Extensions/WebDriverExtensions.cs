@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using QAssistant.WaitHelpers;
 
@@ -11,6 +14,15 @@ namespace QAssistant.Extensions
     {
         // Consider storing the DefaultWaitTime in the web.config.
         private const int DefaultWaitTime = 10;
+
+        // Default format for TakeScreenshot method
+        private const ScreenshotImageFormat DefaultScreenshotImageFormat = ScreenshotImageFormat.Png;
+
+        // Default image file name for TakeScreenshot method
+        private const string DefaultScreenshotImageName = "Screenshot";
+
+        // Default folder name for TakeScreenshot method (it will be added to end of the program execution path)
+        private const string DefaultScreenshotsFolderName = "Screenshots";
 
         // Create a default wait time span so we can reuse the most common time span.
         private static readonly TimeSpan DefaultWaitTimeSpan = TimeSpan.FromSeconds(DefaultWaitTime);
@@ -275,6 +287,115 @@ namespace QAssistant.Extensions
         {
             driver.Close();
             driver.Dispose();
+        }
+
+        /// <summary>
+        ///     Gets a <see cref="T:OpenQA.Selenium.Screenshot" /> object representing the image of the page on the screen.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <returns>A <see cref="T:OpenQA.Selenium.Screenshot" /> object containing the image.</returns>
+        public static Screenshot TakeScreenshotAsScreenshot(this IWebDriver driver)
+        {
+            return ((ITakesScreenshot) driver).GetScreenshot();
+        }
+
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in <see cref="DefaultScreenshotsFolderName" /> folder with
+        ///     <see cref="DefaultScreenshotImageName" /> and <see cref="DefaultScreenshotImageFormat" />.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver)
+        {
+            return driver.TakeScreenshot(DefaultScreenshotImageName,
+                Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory(),
+                    DefaultScreenshotsFolderName),
+                DefaultScreenshotImageFormat);
+        }
+
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in <see cref="DefaultScreenshotsFolderName" /> folder with passed file
+        ///     name and <see cref="DefaultScreenshotImageFormat" />.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="fileName">The image file name./</param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver, string fileName)
+        {
+            return driver.TakeScreenshot(fileName,
+                Path.Combine(
+                    Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? Directory.GetCurrentDirectory(),
+                    DefaultScreenshotsFolderName),
+                DefaultScreenshotImageFormat);
+        }
+
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in passed file path with passed file name and
+        ///     <see cref="DefaultScreenshotImageFormat" />.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="fileName">The image file name.</param>
+        /// <param name="filePath">The full path to save the screenshot to.</param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver, string fileName, string filePath)
+        {
+            return driver.TakeScreenshot(fileName, filePath, DefaultScreenshotImageFormat);
+        }
+
+        /// <summary>
+        ///     Takes a screenshot of the page and saves it in passed file path with passed file name and file format.
+        /// </summary>
+        /// <param name="driver"></param>
+        /// <param name="fileName">The image file name.</param>
+        /// <param name="filePath">The The full path and file name to save the screenshot to..</param>
+        /// <param name="imageFormat">
+        ///     A <see cref="T:OpenQA.Selenium.ScreenshotImageFormat" /> value indicating the format
+        ///     to save the image to.
+        /// </param>
+        /// <returns>The <see cref="string" /> type value of image path.</returns>
+        public static string TakeScreenshot(this IWebDriver driver, string fileName, string filePath,
+            ScreenshotImageFormat imageFormat)
+        {
+            var screen = driver.TakeScreenshotAsScreenshot().AsByteArray;
+            if (!Directory.Exists(filePath)) Directory.CreateDirectory(filePath);
+            var filePathAndName = Path.Combine(filePath,
+                $"{fileName}-{DateTime.UtcNow.Ticks}.{imageFormat}");
+            using var save = File.Create(filePathAndName);
+            save.Write(screen);
+            return filePathAndName;
+        }
+
+        /// <summary>
+        ///     Determines whether the specified <see cref="T:OpenQA.Selenium.IWebElement" /> exists on page.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="locator">The locating mechanism to use.</param>
+        /// <returns><c>true</c> if the specified element is found; otherwise, <c>false</c>.</returns>
+        public static bool ElementExists(this IWebDriver driver, By locator)
+        {
+            try
+            {
+                driver.Wait().Until(ExpectedConditions.ElementExists(locator));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        ///     Hovers over specified element.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="locator">The locating mechanism to use.</param>
+        public static void HoverOnElement(this IWebDriver driver, By locator)
+        {
+            var action = new Actions(driver);
+            action.MoveToElement(driver.WaitUntilFindElement(locator)).Perform();
         }
     }
 }
