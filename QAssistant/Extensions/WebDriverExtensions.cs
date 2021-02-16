@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
@@ -55,6 +54,22 @@ namespace QAssistant.Extensions
         }
 
         /// <summary>
+        ///     Finds all Displayed <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> within the current context
+        ///     using the given mechanism.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="locator">The locating mechanism to use.</param>
+        /// <returns>
+        ///     A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> of all Displayed
+        ///     <see cref="T:OpenQA.Selenium.IWebElement">WebElements</see>
+        ///     which matches the current criteria, or an empty list if nothing matches.
+        /// </returns>
+        public static ReadOnlyCollection<IWebElement> WaitUntilElementsAreDisplayed(this IWebDriver driver, By locator)
+        {
+            return driver.Wait().Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(locator));
+        }
+
+        /// <summary>
         ///     Finds the first <see cref="T:OpenQA.Selenium.IWebElement" /> using the given method and condition
         ///     and waits for it's existence.
         /// </summary>
@@ -67,20 +82,19 @@ namespace QAssistant.Extensions
         }
 
         /// <summary>
-        ///     Finds all Displayed <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> within the current context
+        ///     Finds all <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> within the current context
         ///     using the given mechanism.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver" />.</param>
         /// <param name="locator">The locating mechanism to use.</param>
         /// <returns>
-        ///     A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> of all Displayed
+        ///     A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> of all
         ///     <see cref="T:OpenQA.Selenium.IWebElement">WebElements</see>
         ///     which matches the current criteria, or an empty list if nothing matches.
         /// </returns>
         public static ReadOnlyCollection<IWebElement> WaitUntilFindElements(this IWebDriver driver, By locator)
         {
-            var elements = driver.FindElements(locator);
-            return new ReadOnlyCollection<IWebElement>(elements.Where(element => element.Displayed).ToList());
+            return driver.Wait().Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(locator));
         }
 
         /// <summary>
