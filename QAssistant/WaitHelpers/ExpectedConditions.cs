@@ -22,7 +22,7 @@ namespace QAssistant.WaitHelpers
         /// <returns><see langword="true" /> when the title matches; otherwise, <see langword="false" />.</returns>
         public static Func<IWebDriver, bool> TitleIs(string title)
         {
-            return driver => { return title == driver.Title; };
+            return driver => title == driver.Title;
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace QAssistant.WaitHelpers
         /// <returns><see langword="true" /> when the title matches; otherwise, <see langword="false" />.</returns>
         public static Func<IWebDriver, bool> TitleContains(string title)
         {
-            return driver => { return driver.Title.Contains(title); };
+            return driver => driver.Title.Contains(title);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace QAssistant.WaitHelpers
         /// <returns><see langword="true" /> when the URL is what it should be; otherwise, <see langword="false" />.</returns>
         public static Func<IWebDriver, bool> UrlToBe(string url)
         {
-            return driver => { return driver.Url.ToLowerInvariant().Equals(url.ToLowerInvariant()); };
+            return driver => driver.Url.ToLowerInvariant().Equals(url.ToLowerInvariant());
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace QAssistant.WaitHelpers
         /// <returns><see langword="true" /> when the URL contains the text; otherwise, <see langword="false" />.</returns>
         public static Func<IWebDriver, bool> UrlContains(string fraction)
         {
-            return driver => { return driver.Url.ToLowerInvariant().Contains(fraction.ToLowerInvariant()); };
+            return driver => driver.Url.ToLowerInvariant().Contains(fraction.ToLowerInvariant());
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace QAssistant.WaitHelpers
         /// <returns>The <see cref="IWebElement" /> once it is located.</returns>
         public static Func<IWebDriver, IWebElement> ElementExists(By locator)
         {
-            return driver => { return driver.FindElement(locator); };
+            return driver => driver.FindElement(locator);
         }
 
         /// <summary>
@@ -497,7 +497,7 @@ namespace QAssistant.WaitHelpers
         /// <returns><see langword="true" /> given element is in correct state.; otherwise, <see langword="false" />.</returns>
         public static Func<IWebDriver, bool> ElementToBeSelected(IWebElement element, bool selected)
         {
-            return driver => { return element.Selected == selected; };
+            return driver => element.Selected == selected;
         }
 
         /// <summary>
@@ -508,7 +508,7 @@ namespace QAssistant.WaitHelpers
         /// <returns><see langword="true" /> given element is in correct state.; otherwise, <see langword="false" />.</returns>
         public static Func<IWebDriver, bool> ElementSelectionStateToBe(IWebElement element, bool selected)
         {
-            return driver => { return element.Selected == selected; };
+            return driver => element.Selected == selected;
         }
 
         /// <summary>
