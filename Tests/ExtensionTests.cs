@@ -104,8 +104,7 @@ namespace Tests
         [Test]
         public void TestWaitUntilPageTitleIsOnSuccess()
         {
-            _driver.Click(By.XPath("//a[contains(@href,'google.ge/imghp')]"));
-            Assert.IsInstanceOf<IWebElement>(_driver.WaitUntilPageTitleIs("გუგლის სურათები"));
+            Assert.DoesNotThrow(() => _driver.WaitUntilPageTitleIs("გუგლის სურათები"));
         }
 
         [Test]
@@ -173,6 +172,12 @@ namespace Tests
         public void TestHoverOnElement()
         {
             Assert.DoesNotThrow(() => _driver.HoverOnElement(By.Name("q")));
+        }
+
+        [Test]
+        public void TestClick()
+        {
+            Assert.DoesNotThrow(() => _driver.FindElement(By.Name("q")).Click());
         }
 
         [TearDown]
