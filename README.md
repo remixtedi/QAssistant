@@ -1,6 +1,6 @@
 # QAssistant
 
-QAssistant is created for testers who is working for UI automation using Selenium and WebDriver.
+QAssistant is created for automation engineers and testers who are working for UI automation using Selenium and WebDriver.
 
 ## Installation
 
@@ -15,7 +15,7 @@ or the .NET CLI.
 dotnet add package QAssistant
 ```
 
-## Usage example
+# Usage examples
 
 ```csharp
 using NUnit.Framework;
@@ -43,6 +43,16 @@ namespace Tests
         {
             Assert.IsEmpty(_driver.ReadFromFieldValue(By.Name("q")));
         }
+        public void TestGetChild()
+        {
+            Assert.True(typeof(RemoteWebElement) == _driver.WaitUntilFindElement(By.TagName("center")).GetChild().GetType());
+        }
+        
+        [Test]
+        public void TestHoverOnElement()
+        {
+            Assert.DoesNotThrow(() => _driver.HoverOnElement(By.Name("q")));
+        }
 
         [TearDown]
         public void CloseBrowser()
@@ -53,19 +63,52 @@ namespace Tests
 }
 ```
 
-# QAssitant 1.1.0
-## December 28, 2020
+## TakeScreenshot
+Extension methods to take a screenshot of the current page and save it with default parameters or pass the image file name, path, and format. You can also get a screenshot as “AsByteArray” or “AsBase64EncodedString”.
+```csharp
+Example:
+        [Test]
+        public void TakeScreenshotAsScreenshotTestType()
+        {
+            Assert.True(typeof(Screenshot) = _driver.TakeScreenshotAsScreenshot().GetType());
+        }
+        
+        [Test]
+        public void TakeScreenshotTestWhenFileNameIsPassed()
+        {
+            var file = _driver.TakeScreenshot("screenfromtest");
+            Assert.That(File.Exists(file));
+            File.Delete(file);
+        }
+```
 
-## New Features
-* **TakeScreenshot** - Extension methods to take screenshot of the current page and save it with default parameters or pass the image file name, path and format. You can also get screenshot as "AsByteArray" or "AsBase64EncodedString".
-* **RandomGenerator** - Helper to generate random symbols, letters, numbers or combination of them. It will be helpful in various cases when it is important to generate random strings or numbers.
-* **ElementIdentifier** - Custom attribute for properties. It is created for POM object properties to mark and access them from another classes easly.
+## RandomGenerator
+Helper to generate random symbols, letters, numbers, or combinations of them. It will be helpful in various cases when it is important to generate random strings or numbers.
+```csharp
+Example:
+        [Test]
+        public void GeneratesNumbersAndAlphabeticalCharacters4()
+        {
+            Assert.True(_generator.RandomDigitsAndLetters(10).Length == 10);
+        }
+        
+        [Test]
+        public void RandomNumberReturnsMin10Max20()
+        {
+            var value = _generator.RandomNumber(10, 20);
+            Assert.IsTrue(value >= 10 && value <= 20);
+        }
+```
+
+## ElementIdentifier
+Custom attribute for properties. It is created for POM object properties to mark and access them from other classes easily.
 ```csharp
 Example:
         [ElementIdentifier("logoelement")]
         public IWebElement Logo => _driver.WaitUntilElementIsDisplayed(By.Id("hplogo"));
 ```
-* **ElementFinder** - Helper for POM properties to access them with property names or element identifiers from another classes.
+## ElementFinder
+Helper for POM properties to access them with property names or element identifiers from other classes.
 ```csharp
 Example:
         private ElementFinder<GooglePage> _elementFinder;
@@ -90,18 +133,7 @@ Example:
         {
             Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "Logo").GetType());
         }
-
 ```
-* **WaitUntilElementIsDisplayed** - Extension method finds the first "IWebElement" using the given method and condition and waits for it's visibility.
-* **HoverOnElement, ElementExists, GetParent, GetChild, GetPreviousSibling, GetNextSibling** - Extension methods
-
-## Changes
-* **WaitUntilFindElement** extension method now finds the first "IWebElement" using the given method and condition and waits for it's existence. 
-
-## Bug Fixes
-* Some bug fixes and improvements...
-
-
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
