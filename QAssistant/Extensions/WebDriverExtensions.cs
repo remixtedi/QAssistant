@@ -90,7 +90,7 @@ namespace QAssistant.Extensions
         /// <returns>
         ///     A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> of all
         ///     <see cref="T:OpenQA.Selenium.IWebElement">WebElements</see>
-        ///     which matches the current criteria, or an empty list if nothing matches.
+        ///     which matches the current criteria.
         /// </returns>
         public static ReadOnlyCollection<IWebElement> WaitUntilFindElements(this IWebDriver driver, By locator)
         {

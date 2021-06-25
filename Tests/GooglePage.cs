@@ -15,7 +15,7 @@ namespace Tests
         }
 
         [ElementIdentifier("logoelement")]
-        public IWebElement Logo => _driver.WaitUntilElementIsDisplayed(By.Id("hplogo"));
+        public IWebElement Logo => _driver.WaitUntilElementIsDisplayed(By.XPath("/html/body/div[1]/div[2]/div/img"));
 
         [ElementIdentifier("links")]
         public ReadOnlyCollection<IWebElement> Links => _driver.FindElements(By.XPath("//a"));
