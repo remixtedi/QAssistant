@@ -57,6 +57,12 @@ namespace Tests
         }
 
         [Test]
+        public void TestElementFinderFindElementsOnCount()
+        {
+            Assert.True(_elementFinder.FindElements(_googlePage, "links").Count > 0);
+        }
+
+        [Test]
         public void TestElementFinderFindElementsOnFail()
         {
             Assert.IsNull(_elementFinder.FindElements(_googlePage, "InvalidIdentifier"));

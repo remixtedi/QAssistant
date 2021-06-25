@@ -54,7 +54,8 @@ namespace Tests
         [Test]
         public void TestWaitUntilElementIsDisplayedOnSuccess()
         {
-            Assert.IsInstanceOf(typeof(IWebElement), _driver.WaitUntilElementIsDisplayed(By.Id("hplogo")));
+            Assert.IsInstanceOf(typeof(IWebElement),
+                _driver.WaitUntilElementIsDisplayed(By.XPath("/html/body/div[1]/div[2]/div/img")));
         }
 
         [Test]
@@ -67,7 +68,7 @@ namespace Tests
         [Test]
         public void TestWaitUntilFindElementOnSuccess()
         {
-            Assert.IsInstanceOf(typeof(IWebElement), _driver.WaitUntilFindElement(By.Id("hplogo")));
+            Assert.IsInstanceOf(typeof(IWebElement), _driver.WaitUntilFindElement(By.Name("btnK")));
         }
 
         [Test]
@@ -79,13 +80,13 @@ namespace Tests
         [Test]
         public void TestFindVisibleElementsOnSuccess()
         {
-            Assert.AreEqual(1, _driver.WaitUntilFindElements(By.Id("hplogo")).Count);
+            Assert.AreEqual(1, _driver.WaitUntilFindElements(By.XPath("/html/body/div[1]/div[2]/div/img")).Count);
         }
 
         [Test]
         public void TestFindVisibleElementsOnFail()
         {
-            Assert.AreEqual(0, _driver.WaitUntilFindElements(By.XPath("incorrectxpath")).Count);
+            Assert.Throws<WebDriverTimeoutException>(() => _driver.WaitUntilFindElements(By.XPath("incorrectxpath")));
         }
 
         [Test]
@@ -104,8 +105,8 @@ namespace Tests
         [Test]
         public void TestWaitUntilPageTitleIsOnSuccess()
         {
-            _driver.Click(By.XPath("//a[contains(@href,'google.ge/imghp')]"));
-            Assert.IsInstanceOf<IWebElement>(_driver.WaitUntilPageTitleIs("გუგლის სურათები"));
+            _driver.Navigate().GoToUrl("https://www.google.ge/imghp");
+            Assert.DoesNotThrow(() => _driver.WaitUntilPageTitleIs("გუგლის სურათები"));
         }
 
         [Test]
@@ -146,20 +147,22 @@ namespace Tests
         [Test]
         public void TestGetParent()
         {
-            Assert.True(typeof(RemoteWebElement) == _driver.WaitUntilFindElement(By.Name("q")).GetParent().GetType());
+            Assert.True(typeof(RemoteWebElement) ==
+                        _driver.WaitUntilFindElement(By.TagName("center")).GetParent().GetType());
         }
 
         [Test]
         public void TestGetChild()
         {
-            Assert.True(typeof(RemoteWebElement) == _driver.WaitUntilFindElement(By.Id("main")).GetChild().GetType());
+            Assert.True(typeof(RemoteWebElement) ==
+                        _driver.WaitUntilFindElement(By.TagName("center")).GetChild().GetType());
         }
 
         [Test]
         public void TestGetNextSibling()
         {
             Assert.True(typeof(RemoteWebElement) ==
-                        _driver.WaitUntilFindElement(By.Id("body")).GetNextSibling().GetType());
+                        _driver.WaitUntilFindElement(By.Name("btnK")).GetNextSibling().GetType());
         }
 
         [Test]
@@ -173,6 +176,12 @@ namespace Tests
         public void TestHoverOnElement()
         {
             Assert.DoesNotThrow(() => _driver.HoverOnElement(By.Name("q")));
+        }
+
+        [Test]
+        public void TestClick()
+        {
+            Assert.DoesNotThrow(() => _driver.FindElement(By.Name("q")).Click());
         }
 
         [TearDown]

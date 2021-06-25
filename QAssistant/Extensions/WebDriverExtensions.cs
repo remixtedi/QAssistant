@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
@@ -55,6 +54,22 @@ namespace QAssistant.Extensions
         }
 
         /// <summary>
+        ///     Finds all Displayed <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> within the current context
+        ///     using the given mechanism.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="locator">The locating mechanism to use.</param>
+        /// <returns>
+        ///     A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> of all Displayed
+        ///     <see cref="T:OpenQA.Selenium.IWebElement">WebElements</see>
+        ///     which matches the current criteria, or an empty list if nothing matches.
+        /// </returns>
+        public static ReadOnlyCollection<IWebElement> WaitUntilElementsAreDisplayed(this IWebDriver driver, By locator)
+        {
+            return driver.Wait().Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(locator));
+        }
+
+        /// <summary>
         ///     Finds the first <see cref="T:OpenQA.Selenium.IWebElement" /> using the given method and condition
         ///     and waits for it's existence.
         /// </summary>
@@ -67,20 +82,19 @@ namespace QAssistant.Extensions
         }
 
         /// <summary>
-        ///     Finds all Displayed <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> within the current context
+        ///     Finds all <see cref="T:OpenQA.Selenium.IWebElement">IWebElements</see> within the current context
         ///     using the given mechanism.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver" />.</param>
         /// <param name="locator">The locating mechanism to use.</param>
         /// <returns>
-        ///     A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> of all Displayed
+        ///     A <see cref="T:System.Collections.ObjectModel.ReadOnlyCollection`1" /> of all
         ///     <see cref="T:OpenQA.Selenium.IWebElement">WebElements</see>
-        ///     which matches the current criteria, or an empty list if nothing matches.
+        ///     which matches the current criteria.
         /// </returns>
         public static ReadOnlyCollection<IWebElement> WaitUntilFindElements(this IWebDriver driver, By locator)
         {
-            var elements = driver.FindElements(locator);
-            return new ReadOnlyCollection<IWebElement>(elements.Where(element => element.Displayed).ToList());
+            return driver.Wait().Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(locator));
         }
 
         /// <summary>
@@ -162,62 +176,14 @@ namespace QAssistant.Extensions
         }
 
         /// <summary>
-        ///     Clicks this element.
-        /// </summary>
-        /// <remarks>
-        ///     <para>
-        ///         Click this element. If the click causes a new page to load, the
-        ///         <see cref="M:OpenQA.Selenium.IWebElement.Click" />
-        ///         method will attempt to block until the page has loaded. After calling the
-        ///         <see cref="M:OpenQA.Selenium.IWebElement.Click" /> method, you should discard all references to this
-        ///         element unless you know that the element and the page will still be present.
-        ///         Otherwise, any further operations performed on this element will have an undefined.
-        ///         behavior.
-        ///     </para>
-        ///     <para>
-        ///         If this element is not clickable, then this operation is ignored. This allows you to
-        ///         simulate a users to accidentally missing the target when clicking.
-        ///     </para>
-        /// </remarks>
-        /// <param name="driver">The <see cref="IWebDriver" />.</param>
-        /// <param name="selector">The locating mechanism to use.</param>
-        /// <exception cref="T:OpenQA.Selenium.ElementNotVisibleException">Thrown when the target element is not visible.</exception>
-        /// <exception cref="T:OpenQA.Selenium.StaleElementReferenceException">
-        ///     Thrown when the target element is no longer valid in
-        ///     the document DOM.
-        /// </exception>
-        public static void Click(this IWebDriver driver, By selector)
-        {
-            driver.WaitUntilFindElement(selector).Click();
-        }
-
-        /// <summary>
-        ///     Waits until page title matches the passed value and then execute WaitUntilHtmlTagLoads,
-        ///     where it finds the first <see cref="T:OpenQA.Selenium.IWebElement" /> using the given method.
+        ///     Waits until page title matches the passed value.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver" />.</param>
-        /// <param name="titleOnNewPage">Title of the page.</param>
-        /// <exception cref="T:OpenQA.Selenium.WebDriverTimeoutException">If element is not visible.</exception>
+        /// <param name="pageTitle">Title of the page.</param>
         /// <returns>The first matching <see cref="T:OpenQA.Selenium.IWebElement" /> on the current context.</returns>
-        public static IWebElement WaitUntilPageTitleIs(this IWebDriver driver, string titleOnNewPage)
+        public static void WaitUntilPageTitleIs(this IWebDriver driver, string pageTitle)
         {
-            driver.Wait().Until(ExpectedConditions.TitleIs(titleOnNewPage));
-            return driver.WaitUntilHtmlTagLoads();
-        }
-
-        /// <summary>
-        ///     Waits until a condition is true or times out and finds the first <see cref="T:OpenQA.Selenium.IWebElement" /> using
-        ///     the given method.
-        /// </summary>
-        /// <param name="driver">The <see cref="IWebDriver" />.</param>
-        /// <param name="selector">The locating mechanism to use.</param>
-        /// <param name="condition">A delegate taking a TSource as its parameter, and returning a TResult.</param>
-        /// <returns>The first matching <see cref="T:OpenQA.Selenium.IWebElement" /> on the current context.</returns>
-        public static IWebElement WaitUntilPageLoad(this IWebDriver driver, By selector,
-            Func<IWebDriver, IWebElement> condition)
-        {
-            driver.Wait().Until(condition);
-            return driver.FindElement(selector);
+            driver.Wait().Until(ExpectedConditions.TitleIs(pageTitle));
         }
 
         /// <summary>
@@ -229,8 +195,8 @@ namespace QAssistant.Extensions
         /// <param name="titleOnNewPage">Title of the page</param>
         /// <param name="elementOnOldPage">The <see cref="IWebElement" /></param>
         /// <returns>The <see cref="IWebElement" /> of html tag.</returns>
-        public static IWebElement WaitUntilPageLoad(this IWebDriver driver, string titleOnNewPage,
-            IWebElement elementOnOldPage)
+        public static IWebElement WaitUntilPageLoad(this IWebDriver driver, IWebElement elementOnOldPage,
+            string titleOnNewPage)
         {
             driver.Wait().Until(ExpectedConditions.StalenessOf(elementOnOldPage));
             driver.Wait().Until(ExpectedConditions.TitleIs(titleOnNewPage));
@@ -264,7 +230,7 @@ namespace QAssistant.Extensions
         /// <param name="element">The locating mechanism to use.</param>
         public static void ScrollIntoView(this IWebDriver driver, IWebElement element)
         {
-            // Assumes IWebDriver can be cast as IJavaScriptExecuter.
+            // Assumes IWebDriver can be cast as IJavaScriptExecutor.
             ScrollIntoView((IJavaScriptExecutor) driver, element);
         }
 
@@ -394,8 +360,18 @@ namespace QAssistant.Extensions
         /// <param name="locator">The locating mechanism to use.</param>
         public static void HoverOnElement(this IWebDriver driver, By locator)
         {
-            var action = new Actions(driver);
-            action.MoveToElement(driver.WaitUntilFindElement(locator)).Perform();
+            HoverOnElement(driver, driver.WaitUntilFindElement(locator));
+        }
+
+        /// <summary>
+        ///     Hovers over specified element.
+        /// </summary>
+        /// <param name="driver">The <see cref="IWebDriver" />.</param>
+        /// <param name="element">The <see cref="IWebElement" />.</param>
+        public static void HoverOnElement(this IWebDriver driver, IWebElement element)
+        {
+            var actions = new Actions(driver);
+            actions.MoveToElement(element).Perform();
         }
     }
 }
