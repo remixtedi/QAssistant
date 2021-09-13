@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Html5;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Support.UI;
 using QAssistant.WaitHelpers;
@@ -121,7 +122,7 @@ namespace QAssistant.Extensions
                 }
 
                 if (!string.IsNullOrEmpty(driver.ReadFromFieldValue(selector)))
-                    throw new Exception("Text wasn't cleared.");
+                    throw new Exception("Field wasn't cleared.");
             }
             catch (Exception e)
             {
@@ -214,34 +215,25 @@ namespace QAssistant.Extensions
         }
 
         /// <summary>
-        ///     Wait for <see cref="IWebElement" /> when it will be visible and scroll into view.
+        ///     Wait for <see cref="IWebElement" /> until it will be visible and scroll into view.
         /// </summary>
         /// <param name="driver">The <see cref="IWebDriver" />.</param>
         /// <param name="selector">The locating mechanism to use.</param>
         public static void ScrollIntoView(this IWebDriver driver, By selector)
         {
-            driver.ScrollIntoView(driver.WaitUntilFindElement(selector));
+            driver.ScrollIntoView(driver.WaitUntilElementIsDisplayed(selector));
         }
 
         /// <summary>
-        ///     Wait for <see cref="IWebElement" /> when it will be visible and scroll into view.
-        /// </summary>
-        /// <param name="driver">The <see cref="IWebDriver" />.</param>
-        /// <param name="element">The locating mechanism to use.</param>
-        public static void ScrollIntoView(this IWebDriver driver, IWebElement element)
-        {
-            // Assumes IWebDriver can be cast as IJavaScriptExecutor.
-            ScrollIntoView((IJavaScriptExecutor) driver, element);
-        }
-
-        /// <summary>
-        ///     Wait for <see cref="IWebElement" /> when it will be visible and scroll into view.
+        ///     Wait for <see cref="IWebElement" /> until it will be visible and scroll into view.
         /// </summary>
         /// <param name="driver">The <see cref="IJavaScriptExecutor" />.</param>
-        /// <param name="element">The locating mechanism to use.</param>
-        private static void ScrollIntoView(IJavaScriptExecutor driver, IWebElement element)
+        /// <param name="element">The <see cref="IWebElement" />.</param>
+        public static void ScrollIntoView(this IWebDriver driver, IWebElement element)
         {
-            driver.ExecuteScript("arguments[0].scrollIntoView(true);", element);
+            ((IJavaScriptExecutor)driver)
+                .ExecuteScript("arguments[0].scrollIntoView(true);",
+                driver.Wait().Until(ExpectedConditions.ElementIsVisible(element)));
         }
 
         /// <summary>

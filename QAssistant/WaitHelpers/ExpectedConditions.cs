@@ -112,6 +112,32 @@ namespace QAssistant.WaitHelpers
         }
 
         /// <summary>
+        ///     An expectation for checking that an element is present on the DOM of a page
+        ///     and visible. Visibility means that the element is not only displayed but
+        ///     also has a height and width that is greater than 0.
+        /// </summary>
+        /// <param name="element">The <see cref="IWebElement" />.</param>
+        /// <returns>The <see cref="IWebElement" /> once it is located and visible.</returns>
+        public static Func<IWebDriver, IWebElement> ElementIsVisible(IWebElement element)
+        {
+            return driver =>
+            {
+                try
+                {
+                    return ElementIfVisible(element);
+                }
+                catch (StaleElementReferenceException)
+                {
+                    return null;
+                }
+                catch (NoSuchElementException)
+                {
+                    return null;
+                }
+            };
+        }
+
+        /// <summary>
         ///     An expectation for checking that all elements present on the web page that
         ///     match the locator are visible. Visibility means that the elements are not
         ///     only displayed but also have a height and width that is greater than 0.

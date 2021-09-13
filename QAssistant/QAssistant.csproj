@@ -10,7 +10,7 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl></PackageProjectUrl>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
     </PropertyGroup>
 
     <ItemGroup>

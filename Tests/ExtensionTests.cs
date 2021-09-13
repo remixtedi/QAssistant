@@ -121,7 +121,7 @@ namespace Tests
             _driver.WaitUntilFindElement(By.Name("q")).SendKeys("some text");
             _driver.WaitUntilFindElement(By.Name("q")).SendKeys(Keys.Enter);
             Assert.DoesNotThrow(() =>
-                _driver.ScrollIntoView(_driver.WaitUntilFindElement(By.XPath("//*[@id='rso']/div[4]"))));
+                _driver.ScrollIntoView(_driver.WaitUntilFindElement(By.XPath("//*[@id='rso']/div[8]"))));
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace Tests
         {
             _driver.WaitUntilFindElement(By.Name("q")).SendKeys("some text");
             _driver.WaitUntilFindElement(By.Name("q")).SendKeys(Keys.Enter);
-            Assert.DoesNotThrow(() => _driver.ScrollIntoView(By.XPath("//*[@id='rso']/div[4]")));
+            Assert.DoesNotThrow(() => _driver.ScrollIntoView(By.XPath("//*[@id='rso']/div[8]")));
         }
 
         [Test]
