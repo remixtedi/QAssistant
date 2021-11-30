@@ -5,6 +5,7 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using QAssistant.Extensions;
 using QAssistant.Helpers;
+using Tests.PageObjects;
 
 namespace Tests
 {

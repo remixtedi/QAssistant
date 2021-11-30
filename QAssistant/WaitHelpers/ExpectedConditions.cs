@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using OpenQA.Selenium;
+using QAssistant.Extensions;
 
 namespace QAssistant.WaitHelpers
 {
@@ -214,20 +215,18 @@ namespace QAssistant.WaitHelpers
         /// </summary>
         /// <param name="locator">The locator used to find the element.</param>
         /// <returns><see langword="true" /> once the element text is empty; otherwise, <see langword="false" />.</returns>
-        public static Func<IWebDriver, IWebElement> TextIsNotEmpty(By locator)
+        public static Func<IWebDriver, bool> TextIsNotEmpty(By locator)
         {
             return driver =>
             {
                 try
                 {
                     var element = driver.FindElement(locator);
-                    if (element.Text != string.Empty)
-                        return element;
-                    return null;
+                    return string.IsNullOrEmpty(element.Text);
                 }
                 catch (StaleElementReferenceException)
                 {
-                    return null;
+                    return false;
                 }
             };
         }
@@ -267,8 +266,7 @@ namespace QAssistant.WaitHelpers
                 try
                 {
                     var element = driver.FindElement(locator);
-                    var elementText = element.Text;
-                    return elementText.Contains(text);
+                    return element.Text.Contains(text);
                 }
                 catch (StaleElementReferenceException)
                 {
@@ -289,10 +287,8 @@ namespace QAssistant.WaitHelpers
             {
                 try
                 {
-                    var elementValue = element.GetAttribute("value");
-                    if (elementValue != null)
-                        return elementValue.Contains(text);
-                    return false;
+                    var elementValue = element.ReadFromFieldValue();
+                    return elementValue != null && elementValue.Contains(text);
                 }
                 catch (StaleElementReferenceException)
                 {
@@ -314,10 +310,8 @@ namespace QAssistant.WaitHelpers
                 try
                 {
                     var element = driver.FindElement(locator);
-                    var elementValue = element.GetAttribute("value");
-                    if (elementValue != null)
-                        return elementValue.Contains(text);
-                    return false;
+                    var elementValue = element.ReadFromFieldValue();
+                    return elementValue != null && elementValue.Contains(text);
                 }
                 catch (StaleElementReferenceException)
                 {

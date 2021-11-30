@@ -3,7 +3,7 @@ using OpenQA.Selenium;
 using QAssistant.Extensions;
 using QAssistant.Helpers;
 
-namespace Tests
+namespace Tests.PageObjects
 {
     public class GooglePage
     {

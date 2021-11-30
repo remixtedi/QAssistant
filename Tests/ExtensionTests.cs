@@ -3,6 +3,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Remote;
 using QAssistant.Extensions;
+using QAssistant.WaitHelpers;
 
 namespace Tests
 {
@@ -182,6 +183,18 @@ namespace Tests
         public void TestClick()
         {
             Assert.DoesNotThrow(() => _driver.FindElement(By.Name("q")).Click());
+        }
+
+        [Test]
+        public void WaitPositiveTest()
+        {
+            _driver.Wait(5).Until(ExpectedConditions.ElementIsVisible(By.Name("q")));
+        }
+
+        [Test]
+        public void WaitNegativeTest()
+        {
+            Assert.Throws<WebDriverTimeoutException>(() => _driver.Wait(5).Until(ExpectedConditions.ElementIsVisible(By.Name("incorrect"))));
         }
 
         [TearDown]

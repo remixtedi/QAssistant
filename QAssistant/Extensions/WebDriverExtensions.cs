@@ -12,7 +12,7 @@ namespace QAssistant.Extensions
 {
     public static class WebDriverExtensions
     {
-        // Consider storing the DefaultWaitTime in the web.config.
+        // Consider storing the DefaultWaitTime in the config.
         private const int DefaultWaitTime = 10;
 
         // Default format for TakeScreenshot method
@@ -110,11 +110,8 @@ namespace QAssistant.Extensions
             try
             {
                 var element = driver.WaitUntilFindElement(selector);
-
-                if (element == null)
-                    throw new NoSuchElementException($"Element ({selector}) wasn't found or it's not visible.");
-
                 element.Clear();
+
                 if (!string.IsNullOrEmpty(driver.ReadFromFieldValue(selector)))
                 {
                     element.SendKeys(Keys.Control + "a");
@@ -122,12 +119,15 @@ namespace QAssistant.Extensions
                 }
 
                 if (!string.IsNullOrEmpty(driver.ReadFromFieldValue(selector)))
-                    throw new Exception("Field wasn't cleared.");
+                    throw new Exception("Field can't be cleared.");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
-                throw;
+                if (e.InnerException is NoSuchElementException)
+                {
+                    throw new NoSuchElementException($"Element ({selector}) wasn't found or it's not visible.");
+                }
+                else {  throw e; }
             }
         }
 
