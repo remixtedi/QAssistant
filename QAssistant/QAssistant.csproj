@@ -10,12 +10,12 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageProjectUrl></PackageProjectUrl>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <Version>1.1.0</Version>
+        <Version>1.2.0</Version>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Polly" Version="7.2.1" />
-      <PackageReference Include="Selenium.WebDriver" Version="3.141.0" />
+      <PackageReference Include="Selenium.WebDriver" Version="4.1.0" />
     </ItemGroup>
 
 </Project>

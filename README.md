@@ -45,7 +45,7 @@ namespace Tests
         }
         public void TestGetChild()
         {
-            Assert.True(typeof(RemoteWebElement) == _driver.WaitUntilFindElement(By.TagName("center")).GetChild().GetType());
+            Assert.True(typeof(WebElement) == _driver.WaitUntilFindElement(By.TagName("center")).GetChild().GetType());
         }
         
         [Test]
@@ -125,13 +125,13 @@ Example:
         [Test]
         public void TestElementIdentifierOnSuccessWithElementIdentifier()
         {
-            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "logoelement").GetType());
+            Assert.True(typeof(WebElement) == _elementFinder.FindElement(_googlePage, "logoelement").GetType());
         }
 
         [Test]
         public void TestElementIdentifierOnSuccessWithPropertyName()
         {
-            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "Logo").GetType());
+            Assert.True(typeof(WebElement) == _elementFinder.FindElement(_googlePage, "Logo").GetType());
         }
 ```
 
