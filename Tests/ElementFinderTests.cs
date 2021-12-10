@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Remote;
 using QAssistant.Extensions;
 using QAssistant.Helpers;
 using Tests.PageObjects;
@@ -20,6 +19,7 @@ namespace Tests
         {
             var opts = new ChromeOptions();
             opts.AddArgument("--start-maximized");
+            opts.AddArgument("--headless");
             _driver = new ChromeDriver(opts);
             _googlePage = new GooglePage(_driver);
             _elementFinder = new ElementFinder<GooglePage>();
@@ -29,7 +29,7 @@ namespace Tests
         [Test]
         public void TestElementIdentifierOnSuccessWithElementIdentifier()
         {
-            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "logoelement").GetType());
+            Assert.True(typeof(WebElement) == _elementFinder.FindElement(_googlePage, "logoelement").GetType());
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace Tests
         [Test]
         public void TestElementIdentifierOnSuccessWithPropertyName()
         {
-            Assert.True(typeof(RemoteWebElement) == _elementFinder.FindElement(_googlePage, "Logo").GetType());
+            Assert.True(typeof(WebElement) == _elementFinder.FindElement(_googlePage, "Logo").GetType());
         }
 
         [Test]

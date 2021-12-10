@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Remote;
 
 namespace QAssistant.Helpers
 {
@@ -17,7 +16,7 @@ namespace QAssistant.Helpers
         /// <returns>The first matching <see cref="T:OpenQA.Selenium.IWebElement" /> on the current page object.</returns>
         public IWebElement FindElement(T page, string elementIdentifier)
         {
-            var value = GetValue(typeof(RemoteWebElement), page, elementIdentifier);
+            var value = GetValue(typeof(WebElement), page, elementIdentifier);
             return (IWebElement) value;
         }
 

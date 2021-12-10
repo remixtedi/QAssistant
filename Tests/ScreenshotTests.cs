@@ -21,6 +21,7 @@ namespace Tests
         {
             var opts = new ChromeOptions();
             opts.AddArgument("--start-maximized");
+            opts.AddArgument("--headless");
             _driver = new ChromeDriver(opts);
             _driver.Navigate().GoToUrl("https://google.com");
             if (!Directory.Exists(_defaultScreenshotsPath)) Directory.CreateDirectory(_defaultScreenshotsPath);
